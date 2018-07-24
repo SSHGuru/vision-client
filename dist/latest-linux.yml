@@ -1,0 +1,9 @@
+version: 1.0.0
+files:
+  - url: vision-client-1.0.0-x86_64.AppImage
+    sha512: tFlNDqyzRmlfYFAf3T77wmb6F1YHyxBYvnSqbMsLUL6KUjVZvZTNVZzx4zvI+xsN/VzdMcU+8QfsbXnL99RBgQ==
+    size: 52676511
+    blockMapSize: 57571
+path: vision-client-1.0.0-x86_64.AppImage
+sha512: tFlNDqyzRmlfYFAf3T77wmb6F1YHyxBYvnSqbMsLUL6KUjVZvZTNVZzx4zvI+xsN/VzdMcU+8QfsbXnL99RBgQ==
+releaseDate: '2018-07-24T15:21:02.202Z'

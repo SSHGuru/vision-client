@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Vision OWA Client</title>
+        <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+        <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+        <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+        <link rel="stylesheet" type="text/css" href="css/util.css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+    </head>
+  
+    <body>
+        <!-- User Credentials / Initial Setup wizard GUI -->
+        <div class="contact1">
+            <div class="container-contact1">
+                <div class="contact1-pic js-tilt" data-tilt>
+                    <img src="images/img-01.png" alt="IMG">
+                </div>
+                <form class="contact1-form validate-form" name="ipcForm" onSubmit="JavaScript:sendForm(event)">
+                <span class="contact1-form-title">
+                    OWA Mailbox Setup
+                </span>
+                <div class="wrap-input1 validate-input" data-validate = "Username is required">
+                    <input class="input1" type="text" name="uname" id="uname" placeholder="john.doe">
+                    <span class="shadow-input1"></span>
+                </div>
+                <div class="wrap-input1 validate-input" data-validate = "Password is required">
+                    <input class="input1" type="password" name="pass" id="pass" placeholder="******">
+                    <span class="shadow-input1"></span>
+                </div>
+                <div class="wrap-input1 validate-input" data-validate = "Domain is required">
+                    <input class="input1" type="text" name="edom" id="edom" placeholder="example.com">
+                    <span class="shadow-input1"></span>
+                </div>
+                <div class="wrap-input1 validate-input" data-validate = "Server is required">
+                    <input class="input1" type="text" name="owau" id="owau" placeholder="webmail.example.com">
+                    <span class="shadow-input1"></span>
+                </div>
+                <div class="container-contact1-form-btn">
+                    <button class="contact1-form-btn">
+                        <span>
+                            Confirm
+                            <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+            </form>
+            </div>
+        </div>
+
+        <script src='render.js'></script>
+    
+    </body>
+</html>

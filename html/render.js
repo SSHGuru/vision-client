@@ -1,57 +1,15 @@
 const ipcRenderer = require('electron').ipcRenderer;
-const os = require('os')
- 
-// Used for accessing the keychain native to the OS.
-const keytar = require('keytar')
-
-// The "creds" JSON store is responsibile for keeping track of all the
-// end-user credentials. This is NOT what will be the case in the final
-// version, as this solution has a major security flaw (plaintext password).
-// To be replaced with keytar password management system.
-const Store = require('electron-store')
-const creds = new Store()
-
-// Adds the login information gathered from the user to JSON store "creds".
-// Username and password are getting saved to keychain native to the OS.
-function saveCreds (owau,edom,uname,pass,email) {
-    //creds.set('server',owau)
-    //creds.set('domain',edom)
-    //creds.set('useremailaddress',email)
-    //creds.set('username',uname)
-    //keytar.setPassword('vision', creds.get('username'), pass)
-    //creds.set('password',pass)
-    // Sends an event notification to main.js, 
-    // so the windows actions can be carried out.
-    ipcRenderer.send('creds', owau, edom, uname, pass, email)
-}
-
-// Deletes everything from the "creds" JSON store and deletes the credentials
-// for "visionclient" service, effectively resetting the email account setup.
-function delCreds () {
-    creds.delete('server')
-    creds.delete('domain')
-    creds.delete('useremailaddress')
-    creds.delete('username')
-    keytar.deletePassword('vision', uname)
-    //creds.delete('password')
-}
 
 // Gathers the user input from the form on the setup.html and saves them
 // using the saveCreds function.
-function sendForm(event) {
+function saveCreds(event) {
     event.preventDefault() // stop the form from submitting
-    let uname = document.getElementById("uname").value;
-    let pass = document.getElementById("pass").value;
-    let edom = document.getElementById("edom").value;
-    let owau = document.getElementById("owau").value;
-    let email = uname + "@" + edom;
-    saveCreds(owau,edom,uname,pass,email)
-}
-
-// Reduntant. To be deleted in the next code clean-up.
-function eraseForm(event) {
-    event.preventDefault() // stop the form from submitting
-    delCreds()
+    ipcRenderer.send('creds', 
+        document.getElementById("owau").value, 
+        document.getElementById("edom").value, 
+        document.getElementById("uname").value, 
+        document.getElementById("pass").value,
+        document.getElementById("uname").value + "@" + document.getElementById("edom").value)
 }
 
 // Uses the informations stored in the "creds" JSON store to atomatically

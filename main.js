@@ -1,15 +1,13 @@
-// Modules to control application life and create native browser window
+// Modules to control application life and create native browser window.
+// The 'keytar' module is required for getting access to the OS keychain system.
+// The user's OWA password is getting saved into the keychain and thus secured 
+// outside of the Vision Client.
 const {app, BrowserWindow, Menu, ipcMain} = require('electron')
-const os = require('os')
-const menu = new Menu()
-
-// THe 'config' JSON store is responsible for keeping track of the mailbox configuration.
-// Its only key is "active" which can either hold the value of "yes" or "no". 
 const Store = require('electron-store')
+const keytar = require('keytar')
+
+// The 'config' JSON store is responsible for keeping track of the mailbox configuration.
 const config = new Store()
-const creds = new Store()
- 
-keytar = require('keytar')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -33,7 +31,7 @@ function createWindow () {
   }
 
   // Changes the top bar to 'Vision OWA Client' and ensures it stays that way.
-  mainWindow.webContents.on('did-finish-load',() => {
+  mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.setTitle("Vision OWA Client");
   })
 
@@ -54,29 +52,32 @@ function createWindow () {
   // gets changed to "yes" so the app will skip initial wizard setup page (setup.html).
   // The Vision Client then restarts using the new settings.
   ipcMain.on('creds', function (event, owau, edom, uname, pass, email) {
-    config.set('active','yes')
-    creds.set('server',owau)
-    creds.set('domain',edom)
-    creds.set('useremailaddress',email)
-    creds.set('username',uname)
-    keytar.setPassword('vision', creds.get('username'), pass)
+    config.set('active', 'yes')
+    config.set('server', owau)
+    config.set('domain', edom)
+    config.set('useremailaddress', email)
+    config.set('username', uname)
+    keytar.setPassword('vision', uname, pass)
     app.relaunch() // opens a new Vision Client instance
     app.quit()     // kills the old (setup.html) instance
   })
 }
 
+// This function sens the user credentials and congfig to 'render.js' process.
+// The user password is retrieved using keytar from the OS keychain system.
 ipcMain.on('loggin-in', (event) => {  
-  // Send value synchronously back to renderer process
-  const vault = keytar.getPassword('vision', creds.get('username'))
+  // Send value synchronously back to renderer process.
+  const vault = keytar.getPassword('vision', config.get('username'))
   vault.then((pass) => {
     var loginset = {
-      server: creds.get('server'),
-      domain: creds.get('domain'),
-      useremailaddress: creds.get('useremailaddress'),
-      username: creds.get('username'),
+      server: config.get('server'),
+      domain: config.get('domain'),
+      useremailaddress: config.get('useremailaddress'),
+      username: config.get('username'),
       password: pass
     }
-    console.log(loginset)
+    // Uncomment the below for troubleshooting.
+    //console.log(loginset)
     event.returnValue = loginset
   })
 });
@@ -94,14 +95,18 @@ app.on('ready', function () {
       label: 'File',
       submenu: [{ 
           label: 'Reset Login Credentials', click: () => {
-            creds.delete('server')
-            creds.delete('domain')
-            creds.delete('useremailaddress')
-            keytar.deletePassword('vision', creds.get('username'))
-            creds.delete('username')
-            config.set('active','no')  // this resets the app
-            app.relaunch()             // opens a new Vision Client instance
-            app.quit()                 // kills the old instance
+            config.delete('server')
+            config.delete('domain')
+            config.delete('useremailaddress')
+            keytar.deletePassword('vision', "paul.wilk")
+            config.delete('username')
+            config.set('active','no')  // this resets the app & forces it to launch the setup wizard
+            app.relaunch()             // opens a new Vision Client instance window (w/ wizard)
+            app.quit()                 // kills the old instance thus clearing the old credentials
+          }
+        }, { label: 'Re-login to the OWA', click: () => {
+            app.relaunch()
+            app.quit()
           }
         }, { type: 'separator'
         }, { label: 'Quit Vision OWA Client', click: () => {
@@ -116,7 +121,7 @@ app.on('ready', function () {
                 {role: 'resetzoom'},{role: 'zoomin'},{role: 'zoomout'},{type: 'separator'},{role: 'togglefullscreen'}]
     }, { role: 'window',
       submenu: [{role: 'minimize'},{role: 'close'}]
-    }, { role: 'help',
+    }, { role: 'Help',
       submenu: [{label: 'Learn More',click () { require('electron').shell.openExternal('https://electronjs.org') }}]
     }
   ]

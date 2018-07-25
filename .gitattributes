@@ -1,0 +1,5 @@
+html/css/* linguist-vendored
+html/fonts/* linguist-vendored
+html/images/* linguist-vendored
+html/js/* linguist-vendored
+html/vendor/* linguist-vendored

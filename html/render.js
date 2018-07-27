@@ -4,12 +4,24 @@ const ipcRenderer = require('electron').ipcRenderer;
 // using the saveCreds function.
 function saveCreds(event) {
     event.preventDefault() // stop the form from submitting
+    //var email = document.getElementById("uname").value
+    //var owau = document.getElementById("owau").value
+    //var pass = document.getElementById("pass").value
+    //var pos = email.lastIndexOf("@") //gets location of @ in the email address
+    //var uname = str.slice(0,pos) //gets email username from email address (pre-@)
+    //var edom = str.slice(pos+1)  //gets email domain from email address (post-@)
+    //console.log(email, owau, pass, uname, edom)
     ipcRenderer.send('creds', 
         document.getElementById("owau").value, 
-        document.getElementById("edom").value, 
+        //document.getElementById("edom").value, 
         document.getElementById("uname").value, 
-        document.getElementById("pass").value,
-        document.getElementById("uname").value + "@" + document.getElementById("edom").value)
+        document.getElementById("pass").value)
+        //document.getElementById("uname").value + "@" + document.getElementById("edom").value)
+        //owau, 
+        //edom, 
+        //uname, 
+        //pass,
+        //email)
 }
 
 // Uses the informations stored in the "creds" JSON store to atomatically

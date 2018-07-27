@@ -51,13 +51,19 @@ function createWindow () {
   // login details for the account have been succesfully saved), the "active" flag
   // gets changed to "yes" so the app will skip initial wizard setup page (setup.html).
   // The Vision Client then restarts using the new settings.
-  ipcMain.on('creds', function (event, owau, edom, uname, pass, email) {
+  ipcMain.on('creds', function (event, owau, uname, pass) {
+    var memail = uname
+    var mowau = owau
+    var mpass = pass
+    var mpos = memail.lastIndexOf("@") //gets location of @ in the email address
+    var muname = memail.slice(0,mpos) //gets email username from email address (pre-@)
+    var medom = memail.slice(mpos+1)  //gets email domain from email address (post-@)
     config.set('active', 'yes')
-    config.set('server', owau)
-    config.set('domain', edom)
-    config.set('useremailaddress', email)
-    config.set('username', uname)
-    keytar.setPassword('vision', uname, pass)
+    config.set('server', mowau)
+    config.set('domain', medom)
+    config.set('useremailaddress', memail)
+    config.set('username', muname)
+    keytar.setPassword('vision', muname, mpass)
     app.relaunch() // opens a new Vision Client instance
     app.quit()     // kills the old (setup.html) instance
   })

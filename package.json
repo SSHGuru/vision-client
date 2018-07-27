@@ -1,6 +1,6 @@
 {
   "name": "vision-client",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Standalone app for using the Exchange OWA. Useful for people tired of using regular OWA and/or locked out of IMAP/desktop email clients/etc.",
   "main": "main.js",
   "repository": "https://github.com/vlku-admin/vision-client",
